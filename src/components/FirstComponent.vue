@@ -2,11 +2,14 @@
     <div>
         <BaseInput id="task" label="Inserisci un nuovo task" v-model="newTask"/>
         <BaseButton type="solid" :disabled="newTask === ''" @click="addTask">Aggiungi Task</BaseButton>
+        <BaseButton type="outline" @click="getAllTasks">Tutte le Task</BaseButton>
+        <BaseButton type="outline" @click="taskCompleted">Task completate</BaseButton>
+        <BaseButton type="outline" @click="taskUncompleted">Task da completare</BaseButton>
         <ul>
-            <li v-for="(task, index) in tasks" :key="index" :class="{ 'completed': task.completed }">
+            <li v-for="(task, index) in filteredTasks" :key="index" :class="{ 'completed': task.completed }">
                 {{ task.description }}
-                <BaseCheckBox @change="updateTask(index)"/>
-                <BaseButton type="outline" @click="deleteTask(index)">Cancella task</BaseButton>
+                <BaseCheckBox v-model="task.completed" @change="updateTask(index)" :value="task.completed"/>
+                <BaseButton type="text" @click="deleteTask(task)">Cancella task</BaseButton>
             </li>
         </ul>
         <p>Active tasks: {{ activeTasks }}</p>
@@ -27,11 +30,38 @@ export default {
         BaseCheckBox
     },
     setup() {
+        const showCompletedTasks = ref(false);
+        const showUncompletedTasks = ref(false);
+
         const taskStore = useTaskStore();
         const newTask = ref('');
         const tasks = computed(() => {
             return taskStore.getTasks
         });
+
+        const filteredTasks = computed(() => {
+            if (showCompletedTasks.value === true) {
+                return tasks.value.filter(task => task.completed);
+            } else if (showUncompletedTasks.value === true) {
+                return tasks.value.filter(task => !task.completed);
+            } else {
+                return tasks.value;
+            }
+        });
+        const taskCompleted = () => {
+            showCompletedTasks.value = true;
+            showUncompletedTasks.value = false;
+        };
+
+        const taskUncompleted = () => {
+            showCompletedTasks.value = false;
+            showUncompletedTasks.value = true;
+        };
+
+        const getAllTasks = () => {
+            showCompletedTasks.value = false;
+            showUncompletedTasks.value = false;
+        };
 
         const addTask = () => {
             taskStore.addTask({
@@ -46,14 +76,13 @@ export default {
             taskStore.updateTask(index, task.completed)
         };
 
-        const deleteTask = (index) => {
-            taskStore.deleteTask(index);
+        const deleteTask = (task) => {
+            taskStore.deleteTask(task);
         };
 
         const activeTasks = computed(() => {
             return tasks.value.filter(task => !task.completed).length;
         });
-
 
         return {
             newTask,
@@ -61,7 +90,11 @@ export default {
             addTask,
             updateTask,
             deleteTask,
-            activeTasks
+            activeTasks,
+            taskCompleted,
+            taskUncompleted,
+            filteredTasks,
+            getAllTasks,
         };
     }
 };

@@ -3,7 +3,9 @@ import FirstComponent from "./components/FirstComponent.vue";
 </script>
 
 <template>
-    <FirstComponent/>
+    <div class="container mx-auto">
+        <FirstComponent/>
+    </div>
 </template>
 
 <style scoped>

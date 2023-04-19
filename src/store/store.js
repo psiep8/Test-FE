@@ -18,9 +18,11 @@ export const useTaskStore = defineStore({
                 }
             });
         },
-        deleteTask(index) {
-            this.tasks.splice(index, 1);
+        deleteTask(task) {
+            const taskIndex = this.tasks.indexOf(task);
+            this.tasks.splice(taskIndex, 1);
         }
+
     },
     getters: {
         getTasks() {
