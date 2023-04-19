@@ -9,14 +9,17 @@ export const useTaskStore = defineStore({
         addTask(task) {
             this.tasks.push(task);
         },
-        updateTask(index, completed) {
-            this.tasks = this.tasks.map((task, i) => {
-                if (i === index) {
-                    return {...task, completed: !completed};
-                } else {
-                    return task;
-                }
-            });
+        updateTask(task, completed) {
+            const taskToFind = this.tasks.find(res => res.description === task.description);
+            if (taskToFind) {
+                this.tasks = this.tasks.map(t => {
+                    if (t === taskToFind) {
+                        console.log(t)
+                        return {...t, completed: !completed};
+                    }
+                    return t;
+                });
+            }
         },
         deleteTask(task) {
             const taskIndex = this.tasks.indexOf(task);
