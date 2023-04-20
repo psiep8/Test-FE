@@ -12,7 +12,7 @@
                 <BaseButton type="outline" @click="taskCompleted" class="flex-1 text-xs mr-2 md:mr-4 mb-2 md:mb-0">Task
                     completati
                 </BaseButton>
-                <BaseButton type="outline" @click="taskUncompleted" class="flex-1 text-xs mr-2 md:mr-4 mb-2 md:mb-0">
+                <BaseButton type="outline" @click="taskIncomplete" class="flex-1 text-xs mr-2 md:mr-4 mb-2 md:mb-0">
                     Task da completare
                 </BaseButton>
             </div>
@@ -52,7 +52,7 @@ export default {
     },
     setup() {
         const showCompletedTasks = ref(false);
-        const showUncompletedTasks = ref(false);
+        const showIncompleteTasks = ref(false);
         const taskStore = useTaskStore();
         const newTask = ref('');
         const tasks = computed(() => {
@@ -62,7 +62,7 @@ export default {
         const filteredTasks = computed(() => {
             if (showCompletedTasks.value === true) {
                 return tasks.value.filter(task => task.completed);
-            } else if (showUncompletedTasks.value === true) {
+            } else if (showIncompleteTasks.value === true) {
                 return tasks.value.filter(task => !task.completed);
             } else {
                 return tasks.value;
@@ -70,23 +70,23 @@ export default {
         });
         const taskCompleted = () => {
             showCompletedTasks.value = true;
-            showUncompletedTasks.value = false;
+            showIncompleteTasks.value = false;
         };
 
-        const taskUncompleted = () => {
+        const taskIncomplete = () => {
             showCompletedTasks.value = false;
-            showUncompletedTasks.value = true;
+            showIncompleteTasks.value = true;
         };
 
         const getAllTasks = () => {
             showCompletedTasks.value = false;
-            showUncompletedTasks.value = false;
+            showIncompleteTasks.value = false;
         };
 
         const updateTask = (task) => {
             taskStore.updateTask(task, task.completed);
             showCompletedTasks.value = false;
-            showUncompletedTasks.value = false;
+            showIncompleteTasks.value = false;
         };
 
         const deleteTask = (task) => {
@@ -104,7 +104,7 @@ export default {
             deleteTask,
             activeTasks,
             taskCompleted,
-            taskUncompleted,
+            taskIncomplete,
             filteredTasks,
             getAllTasks,
         };
