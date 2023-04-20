@@ -1,9 +1,9 @@
 <script setup>
-import FirstComponent from "./components/FirstComponent.vue";
+import ViewComponent from "./components/ViewComponent.vue";
 </script>
 
 <template>
-    <FirstComponent/>
+    <ViewComponent/>
 </template>
 
 <style scoped>

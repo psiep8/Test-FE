@@ -1,7 +1,6 @@
 <template>
     <label class="inline-flex items-center">
-        <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600" :checked="value"
-               @change="$emit('input', $event.target.checked)">
+        <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600" @change="onCheck" :checked="checked">
         <span class="ml-2 text-gray-700">
       <slot></slot>
     </span>
@@ -12,9 +11,14 @@
 export default {
     name: "BaseCheckBox",
     props: {
-        value: {
+        checked: {
             type: Boolean,
             default: false
+        }
+    },
+    methods: {
+        onCheck() {
+            this.$emit("update:checked", !this.checked);
         }
     }
 }

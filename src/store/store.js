@@ -14,7 +14,6 @@ export const useTaskStore = defineStore({
             if (taskToFind) {
                 this.tasks = this.tasks.map(t => {
                     if (t === taskToFind) {
-                        console.log(t)
                         return {...t, completed: !completed};
                     }
                     return t;
